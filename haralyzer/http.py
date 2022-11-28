@@ -77,7 +77,7 @@ class Request(HttpTransaction):
         :return: Post data from the request
         :rtype: dict
         """
-        return self.raw_entry["post_data"]
+        return self.raw_entry["postData"]
 
     # Header Values
 
