@@ -71,6 +71,14 @@ class Request(HttpTransaction):
         """
         return self.raw_entry["url"]
 
+    @cached_property
+    def post_data(self) -> dict[str, str]:
+        """
+        :return: Post data from the request
+        :rtype: dict
+        """
+        return self.raw_entry["post_data"]
+
     # Header Values
 
     @cached_property
