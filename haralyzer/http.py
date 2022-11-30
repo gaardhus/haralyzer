@@ -1,10 +1,10 @@
 """Creates the Request and Response sub class that are used by each entry"""
 from typing import Optional
 from cached_property import cached_property
-from .mixins import HttpTransaction
+from .mixins import HttpTransaction, GetPostData
 
 
-class Request(HttpTransaction):
+class Request(HttpTransaction, GetPostData):
     """Request object for an HarEntry"""
 
     def __str__(self):
@@ -77,7 +77,10 @@ class Request(HttpTransaction):
         :return: Post data from the request
         :rtype: dict
         """
-        return self.raw_entry["postData"]
+        try:
+            return self.raw_entry["postData"]
+        except KeyError:
+            return None
 
     # Header Values
 

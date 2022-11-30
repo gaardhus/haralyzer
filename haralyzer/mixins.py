@@ -1,7 +1,15 @@
 """Mixin Objects that allow for shared methods"""
 from collections.abc import MutableMapping
-from typing import Any, Optional
+from typing import Any, Dict, Optional, Union
 from cached_property import cached_property
+
+
+def _list_to_dict(list_: list[dict[str, str]]) -> dict[str, str]:
+    return {
+        dict_["name"].strip(): dict_["value"].strip()
+        for dict_ in list_
+        if not dict_["name"].startswith(":")
+    }
 
 
 class GetHeaders:
@@ -21,6 +29,24 @@ class GetHeaders:
             if header["name"].lower() == name.lower():
                 return header["value"]
         return None
+
+    def get_headers(self) -> dict[str, str]:
+        """Returns headers as a dictionary"""
+        return _list_to_dict(self.headers)
+
+
+class GetCookies:
+    """Mixin to get cookies"""
+
+    def get_cookies(self) -> dict[str, str]:
+        return _list_to_dict(self.cookies)
+
+
+class GetPostData:
+    """Mixin to get post data for a Request"""
+
+    def get_post_data(self) -> Union[dict[str, str], Any]:
+        return _list_to_dict(self.post_data["params"])
 
 
 class MimicDict(MutableMapping):
@@ -42,7 +68,7 @@ class MimicDict(MutableMapping):
         self.raw_entry[key] = value
 
 
-class HttpTransaction(GetHeaders, MimicDict):
+class HttpTransaction(GetHeaders, GetCookies, MimicDict):
     """Class the represents a request or response"""
 
     def __init__(self, entry: dict):
