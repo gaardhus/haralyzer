@@ -1,7 +1,7 @@
 """Mixin Objects that allow for shared methods"""
 from collections.abc import MutableMapping
 from typing import Any, Dict, Optional, Union
-from cached_property import cached_property
+from functools import cached_property
 
 
 def _list_to_dict(list_: list[dict[str, str]]) -> dict[str, str]:
